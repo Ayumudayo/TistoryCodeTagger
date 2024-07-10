@@ -1,8 +1,8 @@
 (function() {
     // Default configuration
-    var config = {
-        startWrapper: "''",
-        endWrapper: """"
+    var config = window.codeWrapperConfig || {
+        startWrapper: "``",
+        endWrapper: "~~"
     };
 
     // Function to replace wrapped text with <code> elements
@@ -55,6 +55,6 @@
     // Event listener for DOMContentLoaded to ensure the script runs after the DOM is fully loaded
     document.addEventListener("DOMContentLoaded", startReplacement);
 
-    // Expose a global object for configuration
-    window.codeWrapperConfig = config;
+    // Expose the startReplacement function to the global scope if needed
+    window.startReplacement = startReplacement;
 })();
