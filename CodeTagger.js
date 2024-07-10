@@ -7,6 +7,10 @@
 
     // Function to replace wrapped text with <code> elements
     function replaceCodeTags(node, startWrapper, endWrapper) {
+        if (node.nodeType === Node.ELEMENT_NODE && 
+            (node.classList.contains('MathJax') || node.classList.contains('MathJax_Preview'))) {
+            return;  // Ignore MathJax elements
+        }
         if (node.nodeType === Node.TEXT_NODE) {
             const regex = new RegExp(escapeRegExp(startWrapper) + "(.*?)" + escapeRegExp(endWrapper), 'g');
             const matches = node.textContent.matchAll(regex);
@@ -91,10 +95,12 @@
             if (typeof MathJax !== 'undefined') {
                 MathJax.Hub.Config({
                     tex2jax: {
-                        inlineMath: [['$', '$'], ['\\(', '\\)']]
+                        inlineMath: [['$', '$'], ['\\(', '\\)']],
+                        ignoreDelimiters: [['`', '`']]
                     }
                 });
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+                MathJax.Hub.Queue(startReplacement);
             } else {
                 console.error("MathJax failed to load properly");
             }
