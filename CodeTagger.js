@@ -58,6 +58,9 @@
         script.type = "text/javascript";
         script.src = url;
         script.onload = callback;
+        script.onerror = function() {
+            console.log('Failed to load script: ' + url);
+        };
         document.head.appendChild(script);
     }
 
@@ -78,21 +81,59 @@
         return false;
     }
 
-    // Execute after DOMContentLoaded
-    document.addEventListener("DOMContentLoaded", function() {
-        startReplacement(); // Code Tagging first
+    // Function to typeset MathJax
+    function typesetMathJax() {
+        if (window.MathJax) {
+            MathJax.Hub.Config({
+                tex2jax: {
+                    inlineMath: [['$', '$'], ['\\(', '\\)']]
+                }
+            });
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        } else {
+            console.log('MathJax is not available.');
+        }
+    }
 
-        if (isMathJaxRequired()) {
-            console.log("MathJax is required, loading...");
-            loadScript("https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML", function() {
-                console.log("MathJax script loaded.");
+    window.MathJax = {
+        tex2jax: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+        }
+    };
+    
+    function loadMathJax() {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML";
+        
+        script.onload = function() {
+            console.log("MathJax script loaded.");
+            if (typeof MathJax !== 'undefined') {
                 MathJax.Hub.Config({
                     tex2jax: {
                         inlineMath: [['$', '$'], ['\\(', '\\)']]
                     }
                 });
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-            });
+            } else {
+                console.error("MathJax failed to load properly");
+            }
+        };
+        
+        script.onerror = function() {
+            console.error('Failed to load MathJax script');
+        };
+        
+        document.head.appendChild(script);
+    }
+
+    // Execute after DOMContentLoaded
+    document.addEventListener("DOMContentLoaded", function() {
+        startReplacement();
+
+        if (isMathJaxRequired()) {
+            console.log("MathJax is required, loading...");
+            loadMathJax();
         } else {
             console.log("MathJax is not required.");
         }
