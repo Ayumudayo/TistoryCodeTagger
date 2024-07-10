@@ -5,8 +5,11 @@
         endWrapper: "~~"
     };
 
+    console.log("Config:", config); // 디버깅 로그 추가
+
     // Function to replace wrapped text with <code> elements
     function replaceCodeTags(node, startWrapper, endWrapper) {
+        console.log("Replacing code tags..."); // 디버깅 로그 추가
         if (node.nodeType === Node.TEXT_NODE) {
             const regex = new RegExp(escapeRegExp(startWrapper) + "(.*?)" + escapeRegExp(endWrapper), 'g');
             const matches = node.textContent.matchAll(regex);
@@ -49,6 +52,7 @@
 
     // Function to start the replacement process with the configured wrappers
     function startReplacement() {
+        console.log("Starting replacement process..."); // 디버깅 로그 추가
         replaceCodeTags(document.body, config.startWrapper, config.endWrapper);
     }
 
