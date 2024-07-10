@@ -80,26 +80,6 @@
         }
         return false;
     }
-
-    // Function to typeset MathJax
-    function typesetMathJax() {
-        if (window.MathJax) {
-            MathJax.Hub.Config({
-                tex2jax: {
-                    inlineMath: [['$', '$'], ['\\(', '\\)']]
-                }
-            });
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-        } else {
-            console.log('MathJax is not available.');
-        }
-    }
-
-    window.MathJax = {
-        tex2jax: {
-            inlineMath: [['$', '$'], ['\\(', '\\)']]
-        }
-    };
     
     function loadMathJax() {
         var script = document.createElement("script");
