@@ -49,7 +49,6 @@
 
     // Function to start the replacement process with the configured wrappers
     function startReplacement() {
-        console.log("Starting replacement process...");
         replaceCodeTags(document.body, config.startWrapper, config.endWrapper);
     }
 
